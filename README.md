@@ -53,4 +53,3 @@ When you send a message with the simple word "launch", the twitch-chat-to-voice 
 E-Mail: nextsigner@gmail.com
 Whatsapp: +54 11 3802 4370
 
-# twitch-galaxian
