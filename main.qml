@@ -28,14 +28,40 @@ ApplicationWindow {
     USettings{
         id: unikSettings
         url:pws+'/'+app.moduleName
+        onCurrentNumColorChanged: setVars()
+        Component.onCompleted: {
+            setVars()
+        }
+        function setVars(){
+            let m0=defaultColors.split('|')
+            let ct=m0[currentNumColor].split('-')
+            app.c1=ct[0]
+            app.c2=ct[1]
+            app.c3=ct[2]
+            app.c4=ct[3]
+        }
     }
     Item{
         id: xApp
         anchors.fill: parent
         Row{
-            X1{id: x1}
             Rectangle{
-                width: xApp.width*0.2
+                width: (xApp.width-x1.width)*0.5
+                height: xApp.height
+                color: app.c1
+                UText{
+                    width: parent.width*0.8
+                    text: 'Si envías por el chat el comando "!a" (escribe signo de exclamación y la letra "a")lanzarás una nave en esta depuración del video. \n\nSi quieres aporta una idea, envíame tu nave en formato png a nextsigner@gmail.com\n\nTambién puedes enviar audios de Whatsapp, para saber cómo envía !wsp en el chat.\n\nMi Whatsapp es +54 11 3802 4370'
+                    wrapMode: Text.WordWrap
+                    anchors.centerIn: parent
+                }
+            }
+            X1{
+                id: x1
+                width: xApp.width*0.5
+            }
+            Rectangle{
+                width: (xApp.width-x1.width)*0.5
                 height: xApp.height
                 WebEngineView{
                     id: wv
@@ -74,9 +100,10 @@ ApplicationWindow {
                         if((''+msg).indexOf('chat.whatsapp.com')<0&&(''+mensaje).indexOf('!')!==1){
                             unik.speak(msg)
                         }
-                        if(msg.indexOf(''+app.user)>=0 &&msg.indexOf('!a')>=0){
+                        if(msg.indexOf('!a')>=0){
                             unik.speak(''+usuario+' lanza nave.')
-                            x1.a()
+                            x1.a(usuario)
+                            xApp.focus=true
                         }
                         /*
                         if(msg.indexOf(''+app.user)>=0 &&msg.indexOf('show')>=0){
@@ -85,14 +112,14 @@ ApplicationWindow {
                         if(msg.indexOf(''+app.user)>=0 &&msg.indexOf('show')>=0){
                             app.visible=true
                         }
-                        if(msg.indexOf(''+app.user)>=0 &&msg.indexOf('hide')>=0){
+                        if(msg.in dexOf(''+app.user)>=0 &&msg.indexOf('hide')>=0){
                             app.visible=false
                         }
                         if(msg.indexOf(''+app.user)>=0 &&msg.indexOf('launch')>=0){
                             Qt.openUrlExternally(app.url)
                         }*/
-                        app.flags = Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
-                        app.flags = Qt.Window | Qt.FramelessWindowHint
+                        //app.flags = Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
+                        //app.flags = Qt.Window | Qt.FramelessWindowHint
                     }
                 }
                 app.uHtml=result
@@ -132,6 +159,16 @@ ApplicationWindow {
         sequence: 'r'
         onActivated: {
             x1.a()
+        }
+    }
+    Shortcut{
+        sequence: 'Ctrl+c'
+        onActivated: {
+            if(unikSettings.currentNumColor<16){
+                unikSettings.currentNumColor++
+            }else{
+                unikSettings.currentNumColor=0
+            }
         }
     }
     Component.onCompleted: {
