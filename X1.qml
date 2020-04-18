@@ -14,10 +14,11 @@ Rectangle {
     property var xc1: xCapa1
     XScores{id: xScores}
     MouseArea{
+        id: maCursor
         anchors.fill: r
         hoverEnabled: true
         cursorShape: Qt.BlankCursor
-        onClicked: p1.s()
+        onClicked: p1.s2(mouseX, mouseY)
         onMouseXChanged:{
             c1.x=mouseX-c1.width*0.5
             c1.y=mouseY
@@ -48,29 +49,29 @@ Rectangle {
             }
         }
     }
-    Timer{
-        running: true
-        repeat: true
-        interval: 2000
-        onTriggered: {
-           // stop()
-            for(let i=0;i<xCapa1.children.length;i++){
-                let obj=xCapa1.children[i]
-                if(obj.objectName.indexOf('uobj')===0){
-                    //if(obj.y+r.height>=r.y&&obj.y-r.height<r.y&&obj.x+r.width>=r.x&&obj.x-r.width<r.x){
-                    uLogView.showLog('c'+i)
-                    if(obj.y>=r.y){
-                        //obj.x=10000
-                        //stop()
-                        //if(r.width>app.fs*0.5){
-                            r.opacity=0.5//width-=15
-                        //}
-                    }
-                }
-            }
-            //start()
-        }
-    }
+//    Timer{
+//        running: true
+//        repeat: true
+//        interval: 2000
+//        onTriggered: {
+//           // stop()
+//            for(let i=0;i<xCapa1.children.length;i++){
+//                let obj=xCapa1.children[i]
+//                if(obj.objectName.indexOf('uobj')===0){
+//                    //if(obj.y+r.height>=r.y&&obj.y-r.height<r.y&&obj.x+r.width>=r.x&&obj.x-r.width<r.x){
+//                    uLogView.showLog('c'+i)
+//                    if(obj.y>=r.y){
+//                        //obj.x=10000
+//                        //stop()
+//                        //if(r.width>app.fs*0.5){
+//                            r.opacity=0.5//width-=15
+//                        //}
+//                    }
+//                }
+//            }
+//            //start()
+//        }
+//    }
 
     Timer{
         id: tBotAttack

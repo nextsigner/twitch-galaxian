@@ -12,15 +12,30 @@ Item {
     property int r: 0
     property int numShot: 1
     property color c1: 'red'
+    property bool desc: true
+    property int ix
     onYChanged:{
-        if(r.y>r.parent.height&&apu.playbackState!==Audio.PlayingState){
+        if(!desc&&y>r.parent.height*0.75-r.height&&y<r.parent.height*0.75){
+            r.x=r.ix
+        }
+        if(!desc&&y>r.parent.height*0.5-r.height&&y<r.parent.height*0.5){
+            r.y=r.parent.height+r.height+100
+            r.desc=true
+            return
+        }
+        if(r.y>r.parent.height&&apu.playbackState!==Audio.PlayingState&&life.width<=0){
             r.destroy(10)
+        }else{
+            boy.enabled=false
+            //            r.y=r.parent.height+r.height+100
+            boy.enabled=true
         }
     }
     Behavior on x{
-        NumberAnimation{duration: 50; easing.type: Easing.InOutQuad}
+        NumberAnimation{duration: 3000; easing.type: Easing.InOutQuad}
     }
     Behavior on y{
+        id: boy
         NumberAnimation{id: nay; duration: 14000-(1000*r.t); easing.type: Easing.InOutQuad}
     }
     Rectangle{
@@ -42,6 +57,12 @@ Item {
             width: r.w
             height: r.w
             rotation: 180
+            Component.onCompleted: {
+                if(unik.fileExist("./img/"+r.nickName+".png")){
+                    img1.source="file:./img/"+r.nickName+".png"
+                    r.t=20
+                }
+            }
         }
 
         UText{
@@ -142,13 +163,30 @@ Item {
     }
     Timer{
         running: true
-        repeat: false
-        interval: 500
+        repeat: r.nickName==='gallocaliente'
+        interval: r.nickName==='gallocaliente'?200:500
         onTriggered: {
             let ws=app.fs*0.5
             let comp=Qt.createComponent("MU1.qml")
             let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, xd: p1.x, yd: p1.y+p1.height+100, objectName: 'uobj'+r.numShot})
             r.numShot++
+        }
+    }
+    Timer{
+        running: true
+        repeat: true
+        interval: 3000
+        onTriggered: {
+            if(r.y>r.parent.height&&life.width>0){
+                r.desc=false
+                r.y=0
+                let lado=JS.getRandomRange(1,2)
+                if(lado===1){
+                    r.x=JS.getRandomRange(0, r.parent.width*0.25-r.width)
+                }else{
+                    r.x=JS.getRandomRange(r.parent.width*0.5, r.parent.width)
+                }
+            }
         }
     }
     Timer{
@@ -177,6 +215,7 @@ Item {
         }
     }
     Component.onCompleted: {
+        r.ix=x
         r.y=r.parent.height+r.height+100
     }
     function r(){
@@ -210,5 +249,6 @@ Item {
         r.y=r.y-r.height*2
         apu.ue=true
         apu.play()
+        xScores.score+=100*r.t
     }
 }

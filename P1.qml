@@ -42,4 +42,13 @@ Item {
         ap.play()
         r.numShot++
     }
+    function s2(px, py){
+        ap.stop()
+        let ws=app.fs*0.25
+        let comp=Qt.createComponent("M2.qml")
+        let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, xd: px, yd: py, objectName: 'obj'+r.numShot})
+        //let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, objectName: 'obj1'})
+        ap.play()
+        r.numShot++
+    }
 }

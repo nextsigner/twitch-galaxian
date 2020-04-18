@@ -5,11 +5,12 @@ Item {
     width: w
     height: width
     property int w: app.fs
-    property int vel: 3000
-    property int xd: 0
-    property int yd: 0
+    property int vel: 500
+    property int xd:-1
+    property int yd:-1
     onYChanged:{
-        if(y>r.parent.height){
+        td.restart()
+        if(y<0-r.height){
             r.destroy(1)
         }
     }
@@ -22,19 +23,23 @@ Item {
     Rectangle{
         id: bg
         anchors.fill: r
-        color: 'red'
         radius: width*0.5
     }
     Timer{
+        id: td
+        interval: 250
+        onTriggered: {
+            r.destroy(1)
+        }
+    }
+    Timer{
+        id: tdir
         running: true
         repeat: true
         interval: 50
         onTriggered: {
-            if(r.y>=p1.y+p1.height*0.25&&r.x-r.width*0.5>=p1.x&&r.x-r.width*0.5<=p1.x+p1.width){
-                r.opacity=0.5
-                //r.width=100
-                //r.x=r.x-50
-            }
+            r.x=maCursor.mouseX
+            r.y=maCursor.mouseY
         }
     }
     Component.onCompleted: {
