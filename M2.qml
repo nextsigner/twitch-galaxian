@@ -8,6 +8,7 @@ Item {
     property int vel: 500
     property int xd:-1
     property int yd:-1
+    property var uForAutoKill
     onYChanged:{
         td.restart()
     }
@@ -49,12 +50,20 @@ Item {
     }
     Timer{
         id: tdir
-        running: !x1.autoKill
+        running: x1.autoKill
         repeat: true
-        interval: 50
+        interval: 100
         onTriggered: {
-            r.x=maCursor.mouseX
-            r.y=maCursor.mouseY
+            if(x1.autoKill){
+                if(r.uForAutoKill&&r.uForAutoKill.x){
+                    r.x=r.uForAutoKill.x
+                    r.y=r.uForAutoKill.y
+                }
+            }else{
+                r.x=maCursor.mouseX
+                r.y=maCursor.mouseY
+            }
+
         }
     }
     Component.onCompleted: {

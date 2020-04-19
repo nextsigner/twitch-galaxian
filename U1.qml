@@ -14,7 +14,7 @@ Item {
     property color c1: 'red'
     property bool desc: true
     property int ix
-    property int score: 0
+    property int score: 1
     onYChanged:{
         rot(p1.x, p1.y)
         if(!desc&&y>r.parent.height*0.75-r.height&&y<r.parent.height*0.75){
@@ -99,13 +99,13 @@ Item {
             NumberAnimation{
                 target: xObj
                 property: 'x'
-                to:r.width
+                to:xObj.x-r.width*0.5
                 duration: 300
             }
             NumberAnimation{
                 target: xObj
                 property: 'y'
-                to:r.width
+                to:xObj.y-r.width*0.5
                 duration: 300
             }
         }
@@ -121,13 +121,13 @@ Item {
             NumberAnimation{
                 target: xObj
                 property: 'x'
-                to:0-r.width*0.3
+                to:xObj.x-r.width*0.3
                 duration: 500
             }
             NumberAnimation{
                 target: xObj
                 property: 'y'
-                to:0-r.width*3
+                to:xObj.y-r.width*3
                 duration: 500
             }
         }
@@ -143,13 +143,13 @@ Item {
             NumberAnimation{
                 target: xObj
                 property: 'x'
-                to:r.width*0.2
+                to:xObj.x+r.width*0.2
                 duration: 800
             }
             NumberAnimation{
                 target: xObj
                 property: 'y'
-                to:0-r.width*1.5
+                to:xObj.y+r.width*1.5
                 duration: 1000
             }
         }
@@ -282,7 +282,12 @@ Item {
         r.y=r.y-r.height*2
         apu.ue=true
         apu.play()
-        xPanelData.setHS(r.nickName, r.score*tMs.ms)
+        //xPanelData.setHS(r.nickName, r.score*tMs.ms)
+        let nscore=parseInt(r.score*tMs.ms)
+        if(nscore>x1.winLastScore){
+            let sql='insert into scores(nickname, score)values(\''+r.nickName+'\', '+nscore+')'
+            unik.sqlQuery(sql)
+        }
         xScores.score+=100*r.t
     }
 }

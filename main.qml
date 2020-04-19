@@ -206,6 +206,15 @@ ApplicationWindow {
         //Depurando
         app.visible=true
         //getViewersCount()
+
+        unik.sqliteInit('scores.sqlite')
+        let sql='CREATE TABLE IF NOT EXISTS scores'
+            +'('
+            +'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+            +'nickname TEXT NOT NULL,'
+            +'score NUMERIC NOT NULL'
+            +')'
+        unik.sqlQuery(sql)
     }
 
     function getViewersCount(){

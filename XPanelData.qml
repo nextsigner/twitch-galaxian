@@ -57,6 +57,31 @@ Rectangle{
             anchors.horizontalCenter: parent.horizontalCenter
         }
     }
+
+    Timer{
+        running: true
+        repeat: true
+        interval: 2000
+        onTriggered: {
+            let sql='select * from scores order by score desc limit 5;'
+            let rows=unik.getSqlData(sql)
+            let a1=[]
+            let a2=[]
+            for(let i=0;i<rows.length;i++){
+                if(i===0){
+                    x1.winScore=rows[i].col[2]
+                }
+                if(i===4){
+                    x1.winLastScore=rows[i].col[2]
+                }
+                a1.push(rows[i].col[1])
+                a2.push(rows[i].col[2])
+            }
+            r.a1=a1
+            r.a2=a2
+            repHS.model=a1
+        }
+    }
     property var objData: ({})
     property var a1: []
     property var a2: []
@@ -69,36 +94,4 @@ Rectangle{
         }
         repHS.model=r.a1
     }
-    function setHS(nn, hs){
-        let na1=[]
-        let na2=[]
-        let mant1=[]
-        let mant2=[]
-        let mpost1=[]
-        let mpost2=[]
-        let npos=-1
-        let nprev=0
-        for(let i=0;i<5;i++){
-            if(r.a2[i]>=hs){
-                mant1.push(nn)
-                mant2.push(hs)
-            }
-        }
-        if(mant2.length>=5){
-            r.a1=na1
-            r.a2=na2
-            repHS.model=na1
-            return
-        }
-        na1.push(nn)
-        na2.push(hs)
-        for(let i2=mant2.length-1;i2<5-mant2.length-1;i2++){
-            na1.push(r.a1[i2])
-            na2.push(r.a2[i2])
-        }
-        r.a1=na1
-        r.a2=na2
-        repHS.model=na1
-
-    }
-}
+   }

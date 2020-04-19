@@ -10,9 +10,17 @@ Rectangle {
     color: app.c1
     border.width: 2
     border.color: 'red'
+    clip: true
     property int numBot: 1
     property var xc1: xCapa1
     property bool autoKill: true
+    property var uForAutoKill
+
+    //Scores
+    property int winScore: 1000000
+    property int winLastScore: 1000001
+
+
     XScores{id: xScores}
     MouseArea{
         id: maCursor
@@ -73,7 +81,7 @@ Rectangle {
         id: tBotAttack
         running: true
         repeat: true
-        interval: 2000
+        interval: 1000
         onTriggered: {
             a('bot'+r.numBot)
             r.numBot++
@@ -106,6 +114,7 @@ Rectangle {
         interval: 300
         property real xd
         property real yd
+        property var objForKill
         property int cv: 1
         property int mv: 0
         onCvChanged: {
@@ -115,9 +124,12 @@ Rectangle {
         }
         onTriggered: {
             tAuto.restart()
-            p1.s2(xd, yd)
-            c1.x=xd
-            c1.y=yd
+            if(cv===0){
+                p1.rot(xd, yd)
+            }
+            p1.s2(xd, yd, objForKill)
+            //c1.x=xd
+            //c1.y=yd
             if(cv<mv){
                 cv++
             }else{
@@ -136,9 +148,8 @@ Rectangle {
             let objC
             let mi=[]
             let md=[]
-            //var obj
             var i
-            for(i=0;i<xCapa1.children.length;i++){
+            /*for(i=0;i<xCapa1.children.length;i++){
                 var obj=xCapa1.children[i]
                 if(obj instanceof U1&&obj.x+obj.width*0.5>r.width*0.5){
                     mi.push(obj)
@@ -152,6 +163,8 @@ Rectangle {
             }else{
                 fa=md
             }
+            //uLogView.showLog('mi: '+mi.length+' md: '+md.length)
+            //return
             if(fa.length<1)return
             var obj2=fa[0]
             if(!obj2.t)return
@@ -165,28 +178,42 @@ Rectangle {
            //tAutoS2.xd=obj2.x
             tAutoS2.yd=obj2.y
             tAutoS2.mv=obj2.t
-            tAutoS2.restart()
-            /*for(i=0;i<xCapa1.children.length;i++){
-                obj=xCapa1.children[i]
+            tAutoS2.restart()*/
+            for(i=0;i<xCapa1.children.length;i++){
+                var obj=xCapa1.children[i]
+                //if((obj instanceof U1||obj instanceof MU1)&&obj.y<obj.parent.height-obj.height){
                 if(obj instanceof U1&&obj.y<obj.parent.height-obj.height){
+
+                tAutoS2.objForKill=xCapa1.children[i]
                     tAutoS2.stop()
                     tAutoS2.interval=obj.t*50
                     tAutoS2.xd=obj.x
                     tAutoS2.yd=obj.y
-                    tAutoS2.mv=obj.t
+                    let nt=5
+                   if(obj instanceof U1){
+                        nt=obj.t
+                   }
+                   tAutoS2.mv=nt
                     tAutoS2.restart()
                     break
                 }
-            }*/
+            }
             //uLogView.showLog('Cant: '+cant)
         }
     }
     function a(objName){
-        let wa=app.fs*1.5
+        let wa=parseInt(app.fs*1.5)
         let comp=Qt.createComponent("U1.qml")
-        let randomPosX=JS.getRandomRange(0+wa, r.width-wa)
-        let e=JS.getRandomRange(1,5)
-        let obj=comp.createObject(xCapa1, {w: wa, x:randomPosX, y:0, nickName: objName, t:e})
+        let randomPosX
+        let posIzqOrDer=JS.getRandomRange(1,3)
+        //uLogView.showLog('pos: '+posIzqOrDer)
+        if(posIzqOrDer===1){
+            randomPosX=JS.getRandomRange(0, r.width*0.5)
+        }else{
+            randomPosX=JS.getRandomRange(r.width*0.5, r.width)
+        }
+        let e=JS.getRandomRange(1,6)
+        let obj=comp.createObject(xCapa1, {w: wa, x:randomPosX, y:0-wa, nickName: objName, t:e})
         /*if(r.autoKill){
             p1.s2(obj.x, obj.y)
         }*/

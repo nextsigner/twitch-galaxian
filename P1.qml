@@ -14,9 +14,6 @@ Item {
     Behavior on y{
         NumberAnimation{duration: 100}
     }
-    Behavior on rotation{
-        NumberAnimation{duration: 100}
-    }
     Rectangle{
         width: r.w
         height: width
@@ -33,6 +30,9 @@ Item {
         border.width: 10
         border.color: app.c2
         anchors.centerIn: r
+        Behavior on rotation{
+            NumberAnimation{duration: 100}
+        }
         SequentialAnimation{
             running: true
             loops: Animation.Infinite
@@ -41,23 +41,23 @@ Item {
                 property: "border.width"
                 duration: 500
                 easing.type: Easing.InOutQuad
-                from: app.fs*0.25
-                to:4
+                from: app.fs*0.8
+                to:2
             }
             NumberAnimation {
                 target: xc1
                 property: "border.width"
                 duration: 800
                 easing.type: Easing.InOutQuad
-                from: 4
-                to:app.fs*0.25
+                from: 2
+                to:app.fs*0.8
             }
         }
         Rectangle{
             width: r.width
             height: width
             radius: width*0.5
-            anchors.centerIn: r
+            anchors.centerIn: parent
             z: parent.z-1
         }
         XEd1{
@@ -71,6 +71,21 @@ Item {
         width: r.width
         height: r.height
         anchors.centerIn: r
+        Item{
+             width: parent.width
+             height: parent.height*0.5
+             anchors.bottom: parent.bottom
+             //anchors.centerIn: parent
+             rotation: 180
+             clip: true
+             opacity: 0.5
+             Rectangle{
+                width: parent.width
+                height: width
+                radius: width*0.5
+                color: 'blue'
+             }
+        }
         Image {
             id: img1
             source: "file:./img/ar1.png"
@@ -130,11 +145,11 @@ Item {
         ap.play()
         r.numShot++
     }
-    function s2(px, py){
+    function s2(px, py, objForKill){
         ap.stop()
         let ws=app.fs*0.25
         let comp=Qt.createComponent("M2.qml")
-        let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y+r.height*0.5, xd: px, yd: py, objectName: 'obj'+r.numShot})
+        let obj=comp.createObject(r.parent, {w: ws, rotation: xShooter.rotation, x: r.x+r.width*0.5-ws*0.5, y:r.y+r.height*0.5, xd: px, yd: py, objectName: 'obj'+r.numShot, uForAutoKill: objForKill})
         //let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, objectName: 'obj1'})
         ap.play()
         r.numShot++
