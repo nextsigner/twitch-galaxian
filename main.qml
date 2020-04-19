@@ -45,17 +45,7 @@ ApplicationWindow {
         id: xApp
         anchors.fill: parent
         Row{
-            Rectangle{
-                width: (xApp.width-x1.width)*0.5
-                height: xApp.height
-                color: app.c1
-                UText{
-                    width: parent.width*0.8
-                    text: 'Si envías por el chat el comando "!a" (escribe signo de exclamación y la letra "a")lanzarás una nave en esta depuración del video. \n\nSi quieres aporta una idea, envíame tu nave en formato png a nextsigner@gmail.com\n\nTambién puedes enviar audios de Whatsapp, para saber cómo envía !wsp en el chat.\n\nMi Whatsapp es +54 11 3802 4370'
-                    wrapMode: Text.WordWrap
-                    anchors.centerIn: parent
-                }
-            }
+            XPanelData{id:xPanelData}
             X1{
                 id: x1
                 width: xApp.width*0.5
@@ -79,7 +69,7 @@ ApplicationWindow {
         id:tCheck
         running: false
         repeat: true
-        interval: 1000
+        interval: 250
         onTriggered: {
             wv.runJavaScript('document.getElementById("root").innerText', function(result) {
                 if(result!==app.uHtml){
@@ -98,7 +88,7 @@ ApplicationWindow {
                         let msg=usuario+' dice '+mensaje
 
                         if((''+msg).indexOf('chat.whatsapp.com')<0&&(''+mensaje).indexOf('!')!==1){
-                            unik.speak(msg)
+                            //unik.speak(msg)
                         }
                         if(msg.indexOf('!a')>=0){
                             unik.speak(''+usuario+' lanza nave.')

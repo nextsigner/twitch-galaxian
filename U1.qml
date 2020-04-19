@@ -14,6 +14,7 @@ Item {
     property color c1: 'red'
     property bool desc: true
     property int ix
+    property int score: 0
     onYChanged:{
         rot(p1.x, p1.y)
         if(!desc&&y>r.parent.height*0.75-r.height&&y<r.parent.height*0.75){
@@ -184,6 +185,16 @@ Item {
         }
     }
     Timer{
+        id: tMs
+        running: true
+        repeat: true
+        interval: 100
+        property int ms: 0
+        onTriggered: {
+            ms+=100
+        }
+    }
+    Timer{
         running: true
         repeat: true
         interval: 3000
@@ -245,10 +256,13 @@ Item {
     function s(){
         let ws=app.fs
         let comp=Qt.createComponent("M1.qml")
-        let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y})
+        let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, objShooter: r})
     }
     function recept(){
         arec.play()
+    }
+    function addScore(){
+        r.score++
     }
     function e(){
         //unik.speak('Destruido')
@@ -268,6 +282,7 @@ Item {
         r.y=r.y-r.height*2
         apu.ue=true
         apu.play()
+        xPanelData.setHS(r.nickName, r.score*tMs.ms)
         xScores.score+=100*r.t
     }
 }

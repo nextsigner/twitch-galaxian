@@ -111,9 +111,10 @@ Rectangle {
         onCvChanged: {
             //tAuto.stop()
             //tAuto.interval=(xCapa1.children.length)*10
-            tAuto.restart()
+            //tAuto.restart()
         }
         onTriggered: {
+            tAuto.restart()
             p1.s2(xd, yd)
             c1.x=xd
             c1.y=yd
@@ -129,7 +130,7 @@ Rectangle {
         id: tAuto
         running: r.autoKill
         repeat: true
-        interval: 1000
+        interval: 300
         onTriggered: {
             let cant=0
             for(let i=0;i<xCapa1.children.length;i++){
@@ -148,7 +149,7 @@ Rectangle {
         }
     }
     function a(objName){
-        let wa=app.fs*2
+        let wa=app.fs*1.5
         let comp=Qt.createComponent("U1.qml")
         let randomPosX=JS.getRandomRange(0+wa, r.width-wa)
         let e=JS.getRandomRange(1,5)

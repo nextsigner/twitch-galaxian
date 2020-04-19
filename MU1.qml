@@ -8,6 +8,7 @@ Item {
     property int vel: 3000
     property int xd: 0
     property int yd: 0
+    property var objShooter
     onYChanged:{
         tDestroy.restart()
         if(y>r.parent.height){
@@ -63,10 +64,13 @@ Item {
         interval: 50
         onTriggered: {
             if(r.y>=p1.y&&r.y<=p1.y+p1.height&&r.x>=p1.x&&r.x+r.width<=p1.x+p1.width){
+                stop()
                 p1.recept()
                 animation.visible=true
                 tShowExp.start()
-                stop()
+                if(r.objShooter){
+                    r.objShooter.addScore()
+                }
             }
         }
     }
