@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 
 Item {
     id: r
@@ -8,7 +9,13 @@ Item {
     property int w: app.fs*3
     property color c1: 'red'
     Behavior on x{
-        NumberAnimation{duration: 50; easing.type: Easing.InOutQuad}
+        NumberAnimation{duration: 100}
+    }
+    Behavior on y{
+        NumberAnimation{duration: 100}
+    }
+    Behavior on rotation{
+        NumberAnimation{duration: 100}
     }
     Rectangle{
         width: r.w
@@ -25,9 +32,28 @@ Item {
         width: r.w*0.75
         height: r.w*0.75
     }
+    ColorOverlay {
+        id: co
+        anchors.fill: img1
+        source: img1
+        color: app.c2
+        opacity: 0.0
+        onOpacityChanged:{
+            if(opacity===1.0){
+                opacity=0.0
+            }
+        }
+        Behavior on opacity{
+            NumberAnimation{duration: 300}
+        }
+    }
     function u(){
         if(y<100)return
         y-=10
+    }
+    function d(){
+        if(y>r.parent.height-r.height)return
+        y+=10
     }
     function r(){
         if(x>parent.width-width)return
@@ -43,6 +69,9 @@ Item {
         var theta = Math.atan2(dy, dx); // range (-PI, PI]
         theta *= 180 / Math.PI;
         r.rotation= theta-90
+    }
+    function recept(){
+        co.opacity=1.0
     }
     function s(){
         ap.stop()

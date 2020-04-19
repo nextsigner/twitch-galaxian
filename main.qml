@@ -144,6 +144,12 @@ ApplicationWindow {
         }
     }
     Shortcut{
+        sequence: 'Down'
+        onActivated: {
+            p1.d()
+        }
+    }
+    Shortcut{
         sequence: 'Right'
         onActivated: {
             p1.r()
@@ -159,6 +165,12 @@ ApplicationWindow {
         sequence: 'Space'
         onActivated: {
             p1.s()
+        }
+    }
+    Shortcut{
+        sequence: 'Ctrl+a'
+        onActivated: {
+            x1.autoKill=!x1.autoKill
         }
     }
     Shortcut{

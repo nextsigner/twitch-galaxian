@@ -15,6 +15,7 @@ Item {
     property bool desc: true
     property int ix
     onYChanged:{
+        rot(p1.x, p1.y)
         if(!desc&&y>r.parent.height*0.75-r.height&&y<r.parent.height*0.75){
             r.x=r.ix
         }
@@ -41,10 +42,11 @@ Item {
     Rectangle{
         id: life
         width: r.width
-        height: 4
+        height: 2
         color: '#ff8833'
         anchors.bottom: r.top
         anchors.bottomMargin: app.fs*0.5
+        anchors.horizontalCenter: r.horizontalCenter
     }
     Rectangle{
         id: xObj
@@ -62,6 +64,15 @@ Item {
                     img1.source="file:./img/"+r.nickName+".png"
                     r.t=20
                 }
+            }
+            AnimatedImage {
+                id: animation;
+                width: parent.width*1.4
+                height: width
+                source: "file:./img/e1.gif"
+                anchors.centerIn: parent
+                visible: false
+                paused: !visible
             }
         }
 
@@ -168,7 +179,7 @@ Item {
         onTriggered: {
             let ws=app.fs*0.5
             let comp=Qt.createComponent("MU1.qml")
-            let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, xd: p1.x, yd: p1.y+p1.height+100, objectName: 'uobj'+r.numShot})
+            let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, xd: p1.x+p1.width*0.5-app.fs*0.25, yd: p1.y+p1.height*0.5-app.fs*0.25, objectName: 'uobj'+r.numShot})
             r.numShot++
         }
     }
@@ -224,6 +235,13 @@ Item {
     function l(){
         x-=10
     }
+    function rot(px, py){
+        var	dx = parseInt(r.x-r.width*0.5) - px,
+        dy = parseInt(r.y+r.width*0.5) - py;
+        var theta = Math.atan2(dy, dx); // range (-PI, PI]
+        theta *= 180 / Math.PI;
+        r.rotation= theta-90-180
+    }
     function s(){
         let ws=app.fs
         let comp=Qt.createComponent("M1.qml")
@@ -235,6 +253,7 @@ Item {
     function e(){
         //unik.speak('Destruido')
         life.visible=false
+        animation.visible=true
         let ran=JS.getRandomRange(1, 4)
         if(ran===1){
             an1.start()

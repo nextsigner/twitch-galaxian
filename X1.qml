@@ -19,11 +19,19 @@ Rectangle {
         anchors.fill: r
         hoverEnabled: true
         cursorShape: Qt.BlankCursor
-        onClicked: p1.s2(mouseX, mouseY)
+        onClicked: {
+            if(!r.autoKill){
+                p1.s2(mouseX, mouseY)
+            }else{
+                p1.s2(c1.x, c1.y)
+            }
+        }
         onMouseXChanged:{
-            c1.x=mouseX-c1.width*0.5
-            c1.y=mouseY
-            p1.x=mouseX-p1.width*0.5
+            if(!r.autoKill){
+                c1.x=mouseX-c1.width*0.5
+                c1.y=mouseY
+                p1.x=mouseX-p1.width*0.5
+            }
         }
     }
     Item{
@@ -41,7 +49,8 @@ Rectangle {
     }
     P1{
         id: p1
-        y:r.height-height
+        y:r.height*0.5-height
+        x: r.width*0.5-width
         //anchors.bottom: parent.bottom
         Component.onCompleted: {
             app.p1=p1
@@ -116,17 +125,16 @@ Rectangle {
             }
         }
     }
-
     Timer{
         id: tAuto
-        running: true
+        running: r.autoKill
         repeat: true
         interval: 1000
         onTriggered: {
             let cant=0
             for(let i=0;i<xCapa1.children.length;i++){
                 let obj=xCapa1.children[i]
-                if(obj instanceof U1){
+                if(obj instanceof U1&&obj.y<obj.parent.height-obj.height){
                     tAutoS2.stop()
                     tAutoS2.interval=obj.t*50
                     tAutoS2.xd=obj.x
