@@ -12,6 +12,7 @@ Rectangle {
     border.color: 'red'
     property int numBot: 1
     property var xc1: xCapa1
+    property bool autoKill: true
     XScores{id: xScores}
     MouseArea{
         id: maCursor
@@ -29,7 +30,15 @@ Rectangle {
         id: xCapa1
         anchors.fill: r
     }
-    C1{id: c1}
+    C1{
+        id: c1
+        onXChanged: {
+            p1.rot(x, y)
+        }
+        onYChanged: {
+            p1.rot(x, y)
+        }
+    }
     P1{
         id: p1
         y:r.height-height
@@ -49,29 +58,7 @@ Rectangle {
             }
         }
     }
-//    Timer{
-//        running: true
-//        repeat: true
-//        interval: 2000
-//        onTriggered: {
-//           // stop()
-//            for(let i=0;i<xCapa1.children.length;i++){
-//                let obj=xCapa1.children[i]
-//                if(obj.objectName.indexOf('uobj')===0){
-//                    //if(obj.y+r.height>=r.y&&obj.y-r.height<r.y&&obj.x+r.width>=r.x&&obj.x-r.width<r.x){
-//                    uLogView.showLog('c'+i)
-//                    if(obj.y>=r.y){
-//                        //obj.x=10000
-//                        //stop()
-//                        //if(r.width>app.fs*0.5){
-//                            r.opacity=0.5//width-=15
-//                        //}
-//                    }
-//                }
-//            }
-//            //start()
-//        }
-//    }
+
 
     Timer{
         id: tBotAttack
@@ -103,12 +90,64 @@ Rectangle {
             let obj=comp.createObject(xCapa1, {p: JS.getRandomRange(1,8)})
         }
     }
+    Timer{
+        id: tAutoS2
+        running: mv>0
+        repeat: true
+        interval: 300
+        property real xd
+        property real yd
+        property int cv: 1
+        property int mv: 0
+        onCvChanged: {
+            //tAuto.stop()
+            //tAuto.interval=(xCapa1.children.length)*10
+            tAuto.restart()
+        }
+        onTriggered: {
+            p1.s2(xd, yd)
+            c1.x=xd
+            c1.y=yd
+            if(cv<mv){
+                cv++
+            }else{
+                cv=0
+                mv=0
+            }
+        }
+    }
+
+    Timer{
+        id: tAuto
+        running: true
+        repeat: true
+        interval: 1000
+        onTriggered: {
+            let cant=0
+            for(let i=0;i<xCapa1.children.length;i++){
+                let obj=xCapa1.children[i]
+                if(obj instanceof U1){
+                    tAutoS2.stop()
+                    tAutoS2.interval=obj.t*50
+                    tAutoS2.xd=obj.x
+                    tAutoS2.yd=obj.y
+                    tAutoS2.mv=obj.t
+                    tAutoS2.restart()
+                    break
+                }
+            }
+            //uLogView.showLog('Cant: '+cant)
+        }
+    }
     function a(objName){
         let wa=app.fs*2
         let comp=Qt.createComponent("U1.qml")
         let randomPosX=JS.getRandomRange(0+wa, r.width-wa)
         let e=JS.getRandomRange(1,5)
         let obj=comp.createObject(xCapa1, {w: wa, x:randomPosX, y:0, nickName: objName, t:e})
+        /*if(r.autoKill){
+            p1.s2(obj.x, obj.y)
+        }*/
     }
 }
 

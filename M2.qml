@@ -10,9 +10,6 @@ Item {
     property int yd:-1
     onYChanged:{
         td.restart()
-        if(y<0-r.height){
-            r.destroy(1)
-        }
     }
     Behavior on x{
         NumberAnimation{duration: r.vel;}
@@ -24,6 +21,24 @@ Item {
         id: bg
         anchors.fill: r
         radius: width*0.5
+        Rectangle{
+            id: efe1
+            height: parent.width*3
+            width: 1
+            anchors.centerIn: parent
+            SequentialAnimation{
+                running: true
+                loops: Animation.Infinite
+                NumberAnimation {
+                    target: efe1
+                    property: "rotation"
+                    duration: 2000
+                    easing.type: Easing.InOutQuad
+                    from: 0
+                    to:700
+                }
+            }
+        }
     }
     Timer{
         id: td
@@ -34,7 +49,7 @@ Item {
     }
     Timer{
         id: tdir
-        running: true
+        running: !x1.autoKill
         repeat: true
         interval: 50
         onTriggered: {

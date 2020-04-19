@@ -138,6 +138,12 @@ ApplicationWindow {
         }
     }
     Shortcut{
+        sequence: 'Up'
+        onActivated: {
+            p1.u()
+        }
+    }
+    Shortcut{
         sequence: 'Right'
         onActivated: {
             p1.r()

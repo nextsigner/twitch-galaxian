@@ -21,10 +21,14 @@ Item {
         id: img1
         source: "file:./img/p1.png"
         anchors.centerIn: r
-        width: r.w
-        height: r.w
+        anchors.verticalCenterOffset: r.height*0.25
+        width: r.w*0.75
+        height: r.w*0.75
     }
-
+    function u(){
+        if(y<100)return
+        y-=10
+    }
     function r(){
         if(x>parent.width-width)return
         x+=10
@@ -33,11 +37,18 @@ Item {
         if(r.x-10<0)return
         r.x-=10
     }
+    function rot(px, py){
+        var	dx = parseInt(r.x-r.width*0.5) - px,
+        dy = parseInt(r.y+r.width*0.5) - py;
+        var theta = Math.atan2(dy, dx); // range (-PI, PI]
+        theta *= 180 / Math.PI;
+        r.rotation= theta-90
+    }
     function s(){
         ap.stop()
         let ws=app.fs*0.25
         let comp=Qt.createComponent("M1.qml")
-        let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, objectName: 'obj'+r.numShot})
+        let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y+r.height, objectName: 'obj'+r.numShot})
         //let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, objectName: 'obj1'})
         ap.play()
         r.numShot++
@@ -46,7 +57,7 @@ Item {
         ap.stop()
         let ws=app.fs*0.25
         let comp=Qt.createComponent("M2.qml")
-        let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, xd: px, yd: py, objectName: 'obj'+r.numShot})
+        let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y+r.height*0.5, xd: px, yd: py, objectName: 'obj'+r.numShot})
         //let obj=comp.createObject(r.parent, {w: ws, x: r.x+r.width*0.5-ws*0.5, y:r.y, objectName: 'obj1'})
         ap.play()
         r.numShot++
