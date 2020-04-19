@@ -6,7 +6,7 @@ Item {
     width: w
     height: w
     property int numShot: 0
-    property int w: app.fs*3
+    property int w: app.fs*2
     property color c1: 'red'
     Behavior on x{
         NumberAnimation{duration: 100}
@@ -24,27 +24,75 @@ Item {
         //border.width: 1
         //border.color: 'red'
     }
-    Image {
-        id: img1
-        source: "file:./img/p1.png"
+    Rectangle{
+        id: xc1
+        width: r.width
+        height: width
+        radius: width*0.5
+        color: 'transparent'
+        border.width: 10
+        border.color: app.c2
         anchors.centerIn: r
-        anchors.verticalCenterOffset: r.height*0.25
-        width: r.w*0.75
-        height: r.w*0.75
-    }
-    ColorOverlay {
-        id: co
-        anchors.fill: img1
-        source: img1
-        color: app.c2
-        opacity: 0.0
-        onOpacityChanged:{
-            if(opacity===1.0){
-                opacity=0.0
+        SequentialAnimation{
+            running: true
+            loops: Animation.Infinite
+            NumberAnimation {
+                target: xc1
+                property: "border.width"
+                duration: 500
+                easing.type: Easing.InOutQuad
+                from: app.fs*0.25
+                to:4
+            }
+            NumberAnimation {
+                target: xc1
+                property: "border.width"
+                duration: 800
+                easing.type: Easing.InOutQuad
+                from: 4
+                to:app.fs*0.25
             }
         }
-        Behavior on opacity{
-            NumberAnimation{duration: 300}
+        Rectangle{
+            width: r.width
+            height: width
+            radius: width*0.5
+            anchors.centerIn: r
+            z: parent.z-1
+        }
+        XEd1{
+            height: app.fs
+            tc: app.fs*0.3
+            anchors.centerIn: parent
+        }
+    }
+    Item{
+        id: xShooter
+        width: r.width
+        height: r.height
+        anchors.centerIn: r
+        Image {
+            id: img1
+            source: "file:./img/ar1.png"
+            anchors.centerIn: parent
+            anchors.verticalCenterOffset: parent.height*0.25
+            width: r.w*0.75
+            height: r.w*0.75
+        }
+        ColorOverlay {
+            id: co
+            anchors.fill: img1
+            source: img1
+            color: app.c2
+            opacity: 0.0
+            onOpacityChanged:{
+                if(opacity===1.0){
+                    opacity=0.0
+                }
+            }
+            Behavior on opacity{
+                NumberAnimation{duration: 300}
+            }
         }
     }
     function u(){
@@ -68,7 +116,7 @@ Item {
         dy = parseInt(r.y+r.width*0.5) - py;
         var theta = Math.atan2(dy, dx); // range (-PI, PI]
         theta *= 180 / Math.PI;
-        r.rotation= theta-90
+        xShooter.rotation= theta-90
     }
     function recept(){
         co.opacity=1.0

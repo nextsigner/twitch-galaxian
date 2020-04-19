@@ -58,7 +58,7 @@ Rectangle {
     }
     Audio{
         id: ap
-        source:'file:./sounds/m1.mp3'
+        source:'file:./sounds/p1s1.wav'
         autoLoad: true
         autoPlay: true
         onPlaybackStateChanged:{
@@ -133,8 +133,41 @@ Rectangle {
         interval: 300
         onTriggered: {
             let cant=0
-            for(let i=0;i<xCapa1.children.length;i++){
-                let obj=xCapa1.children[i]
+            let objC
+            let mi=[]
+            let md=[]
+            //var obj
+            var i
+            for(i=0;i<xCapa1.children.length;i++){
+                var obj=xCapa1.children[i]
+                if(obj instanceof U1&&obj.x+obj.width*0.5>r.width*0.5){
+                    mi.push(obj)
+                }else{
+                    md.push(obj)
+                }
+            }
+            var fa
+            if(mi.length>md.length){
+                fa=mi
+            }else{
+                fa=md
+            }
+            if(fa.length<1)return
+            var obj2=fa[0]
+            if(!obj2.t)return
+            tAutoS2.stop()
+            tAutoS2.interval=obj2.t*50
+            if(obj2.x<r.width*0.5){
+                tAutoS2.xd=obj2.x-app.fs*6
+            }else{
+                 tAutoS2.xd=obj2.x+app.fs*6
+            }
+           //tAutoS2.xd=obj2.x
+            tAutoS2.yd=obj2.y
+            tAutoS2.mv=obj2.t
+            tAutoS2.restart()
+            /*for(i=0;i<xCapa1.children.length;i++){
+                obj=xCapa1.children[i]
                 if(obj instanceof U1&&obj.y<obj.parent.height-obj.height){
                     tAutoS2.stop()
                     tAutoS2.interval=obj.t*50
@@ -144,7 +177,7 @@ Rectangle {
                     tAutoS2.restart()
                     break
                 }
-            }
+            }*/
             //uLogView.showLog('Cant: '+cant)
         }
     }

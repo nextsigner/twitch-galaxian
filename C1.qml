@@ -9,10 +9,10 @@ Rectangle {
     border.color: 'red'
     radius: width*0.5
     Behavior on x{
-        NumberAnimation{duration: 300}
+        NumberAnimation{duration: 100}
     }
     Behavior on y{
-        NumberAnimation{duration: 300}
+        NumberAnimation{duration: 100}
     }
     Item{
         width: r.width

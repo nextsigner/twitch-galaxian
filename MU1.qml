@@ -63,15 +63,28 @@ Item {
         repeat: true
         interval: 50
         onTriggered: {
+            stop()
             if(r.y>=p1.y&&r.y<=p1.y+p1.height&&r.x>=p1.x&&r.x+r.width<=p1.x+p1.width){
-                stop()
                 p1.recept()
                 animation.visible=true
                 tShowExp.start()
                 if(r.objShooter){
                     r.objShooter.addScore()
                 }
+                return
             }
+            for(let i=0;i<x1.children.length;i++){
+                let obj=x1.children[i]
+                if(obj.objectName.indexOf('obj')===0){
+                    if(obj.y+r.height>=r.y&&obj.y-r.height<r.y&&obj.x+r.width>=r.x&&obj.x-r.width<r.x){
+                        p1.recept()
+                        animation.visible=true
+                        tShowExp.start()
+                        return
+                    }
+                }
+            }
+            start()
         }
     }
     Timer{
